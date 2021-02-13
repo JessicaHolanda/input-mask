@@ -1,26 +1,58 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useCallback } from "react";
 
-function App() {
+import Input from "./components/Input";
+
+interface Usuario {
+  cep: string;
+  cpf: string;
+  price: number;
+}
+
+const App: React.FC = () => {
+  const [usuario, setUsuario] = useState<Usuario>({} as Usuario);
+
+  const handleChange = useCallback(
+    (e: React.FormEvent<HTMLInputElement>) => {
+      setUsuario({
+        ...usuario,
+        [e.currentTarget.name]: e.currentTarget.value,
+      });
+    },
+    [usuario]
+  );
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      <span>CEP</span>
+      <Input
+        name="cep"
+        mask="cep"
+        onChange={handleChange}
+        placeholder="99999-999"
+      />
+
+      <span>CPF</span>
+      <Input
+        name="cpf"
+        mask="cpf"
+        onChange={handleChange}
+        placeholder="999.999.999-99"
+      />
+
+      <span>Preço</span>
+      <Input
+        name="price"
+        mask="currency"
+        prefix="R$"
+        placeholder="0,01"
+        onChange={handleChange}
+      />
+
+      <button className="button" onClick={() => console.log(usuario)}>
+        Salvar
+      </button>
     </div>
   );
-}
+};
 
 export default App;
